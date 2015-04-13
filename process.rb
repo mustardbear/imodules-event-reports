@@ -4,10 +4,27 @@ require 'csv'
 require 'colorize'
 require 'optparse'
 require 'ostruct'
+require 'logger'
 
 CONFIG_DIRECTORY = "./config/"
 load "config.rb"
 
+logger = Logger.new(STDOUT)
+logger.level = LOG_LEVEL
+logger.datetime_format = '%Y-%m-%d %H:%M:%S'
+logger.formatter = proc do |severity, datetime, progname, msg|
+  color = case severity
+    when "DEBUG" then :light_white
+    when "INFO" then :light_yellow
+    when "WARN" then :light_red
+    when "ERROR" then :blue
+    when "FATAL" then :magenta
+    when "UNKNOWN" then :cyan
+  end
+  "#{datetime}: #{msg.colorize(color)}\n"
+end
+
+# For parsing command line arguments
 class Arguments
   def self.parse(args)
     options = OpenStruct.new
@@ -30,22 +47,15 @@ class Arguments
   end
 end
 
+# Parse out the arguments to see what event we're working on
 options = Arguments.parse(ARGV)
-load "#{CONFIG_DIRECTORY}#{EVENTS[options.event.to_sym]}"
 
-# For each column listed in SUMMABLE, total them up and return in a CSV::Row
-def sum_columns(guests)
-  sum_fields = []
-  guests.headers.each do |header|
-    if SUMMABLE.include?(header)
-      column = guests[header].collect { |x| x.nil? ? 0 : x.to_f}
-      sum_fields << column.inject(0, :+)
-    else
-      sum_fields << ''
-    end
-  end
-  summary_row = CSV::Row.new(guests.headers, sum_fields)
-end
+logger.info { "Beginning Merge Process"}
+
+# Load the config file
+configuration_file = "#{CONFIG_DIRECTORY}#{EVENTS[options.event.to_sym]}"
+logger.debug { "loading event configuration from file #{configuration_file}" }
+load configuration_file
 
 # Merge rows when a guest has multiple. All text columns default to the first/newest row, quantity columns are summed
 def merge_stack(stack)
@@ -64,21 +74,31 @@ def merge_stack(stack)
 end
 
 # Read in the entire registration report
-guests = CSV.read(SOURCE, headers: true, encoding: "iso-8859-1:UTF-8")
+logger.debug { "loading #{SOURCE} as a .csv file" }
+rows = CSV.read(SOURCE, headers: true, encoding: "iso-8859-1:UTF-8")
+logger.debug { "Number of rows = #{rows.length}"}
 
-# Sum up first
-summary_row = sum_columns(guests)
+output_row_count = 0
 
 # Merge rows that need merging and create a new .csv file
+logger.debug { "creating merged version in #{MERGED}" }
 CSV.open(MERGED, 'w') do |csv|
-  csv << guests.headers
+  
+  # Write headers to the top of the new file
+  csv << rows.headers
+  
+  # Initialize a new stack we'll use to gather rows for the same person
   stack = []
-  guests.each do |guest|
+  
+  # Go through each row from the original file
+  rows.each do |row|
+    
+    # If there's no one in the stack, add this person
     if stack.count == 0
-      stack.push(guest)
+      stack.push(row)
     else
-      # We can only merge records programmatically when the user has an alternate_id, otherwise, we might lose data
-      if stack[0]['alternate_id'] != guest['alternate_id'] || (stack[0]['alternate_id'].nil? || stack[0]['alternate_id'].strip.empty?)
+      # We merge records based on the imodules_id - every row should have one and every person should have just one
+      if stack[0]['imodules_id'] != row['imodules_id'] || (stack[0]['imodules_id'].nil? || stack[0]['imodules_id'].strip.empty?)
         # This Guest is not the same as those on the stack
         if stack.count > 1
         
@@ -87,20 +107,24 @@ CSV.open(MERGED, 'w') do |csv|
         end
         
         # Replace any column with a zero with a blank
-        row = CSV::Row.new(guests.headers, stack[0].collect { |x| x[1] == 0 ? '' : x[1]})
+        new_row = CSV::Row.new(rows.headers, stack[0].collect { |x| x[1] == 0 ? '' : x[1]})
         
         # Put the row in the file
-        csv << row
+        csv << new_row
+        output_row_count = output_row_count + 1
 
         # CLEAR THE STACK
         stack.clear
         
         # START A NEW STACK
-        stack.push(guest)
+        stack.push(row)
       else
         # PUSH THE GUEST ONTO THE STACK
-        stack.push(guest)
+        stack.push(row)
       end
     end
   end
 end
+
+logger.debug { "Number of rows in the output file: #{output_row_count}"}
+logger.debug { "Number of rows merged: #{rows.length - output_row_count}"}
