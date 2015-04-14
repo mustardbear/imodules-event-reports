@@ -62,6 +62,19 @@ SUMMABLE = [
   "Reunion 2015 - RW15 Pledge Total Amount"
 ]
 
+# You must have the following three columns: first_name:, last_name:, and guest_of:
+PERSON_DEFINITION = {
+  first_name: { column_name: "First_Name", output_column_name: "First Name" },
+  last_name: { column_name: "Last_Name", output_column_name: "Last Name"  },
+  alternate_id: { column_name: "alternate_id", output_column_name: "Alternate ID"  },
+  maiden_name: { column_name: "maiden_name", output_column_name: "Former Name"  },
+  pref_first_name: { column_name: "pref_first_name", output_column_name: "Preferred First Name" },
+  email_address: { column_name: "email_address", output_column_name: "Email" },
+  class_year: { column_name: "Reunion 2015 - RW15 Class Year" , setter: Proc.new { |value| value.eql?("Not an Alumnus/Alumna") ? "No Class Year" : (value.nil? || value.strip.empty? ? "No Class Year" : value) }, output_column_name: "Class Year" },
+  guest_of: { column_name: "Guest of", output_column_name: "Guest Of" }
+}
+
+
 ACTIVITIES = [
   
   { name: "Reunion 2015",

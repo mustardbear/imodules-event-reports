@@ -11,23 +11,82 @@ load "#{CONFIG_DIRECTORY}reunion15.rb"
 registrants = Array.new
 people_count = 0
 
+# They say if you need comments they your code isn't very self-documenting.
+# Maybe they are right. But this is pretty complex so I'm going to comment
+# the heck out of this.
+# PersonStruct is a class factory - it creates a Person class based on the
+#   structure definied in the configuration file. The parameter is an array
+#   of attribute names. 
+def PersonStruct(*keys)
+  Class.new do
+    # create an attribute reader for each attribute
+    attr_reader *keys
+    attr_reader :guest_of, :guests, :activities, :search_name
+    
+    # define the intialize method - most of the time we are just setting attributes
+    # to the value from the spreadsheet but it is possible to pass a custom proc
+    # to clean up values
+    def initialize(hash)
+      hash.each do |key,value|
+        # if this attribute has a custom setter, use that otherwise set to the value
+        if PERSON_DEFINITION[key][:setter]
+          instance_variable_set("@#{key}", PERSON_DEFINITION[key][:setter].call(value))
+        else
+          instance_variable_set("@#{key}", value)
+        end
+      end
+      @guests = Array.new
+      @activities = Array.new
+      @search_name = "#{@last_name}, #{@first_name}"
+    end
+    
+    # For any columns with a custom setter, create a custom setter
+    PERSON_DEFINITION.keys.each do |key|
+      if PERSON_DEFINITION[key][:setter]
+        define_method("#{key}=") { |value| instance_variable_set("@#{key}", PERSON_DEFINITION[key][:setter].call(value)) }
+      end
+    end
+    
+    def add_guest(person)
+      @guests.push(person)
+    end
+    
+    def is_guest?
+      return @guest_of
+    end
+
+    def add_activity(activity, columns)
+      @activities.push({name: activity, columns: columns})
+    end
+  
+    def attending?(activity_name)
+      activity = @activities.select { |row| row[:name].eql?(activity_name) }
+      activity.length > 0 ? activity : false
+    end
+    
+    def to_s
+      out = ""
+      PERSON_DEFINITION.keys.each do |key|
+        instance_variable_name = "@#{key}"
+          out << "#{key}: |#{instance_variable_get(instance_variable_name)}| "
+      end
+      out << "search_name: |#{@search_name}|"
+      out
+    end 
+  end
+end
 
 # Read in the entire registration report and go through each row creating people as we go
 rows = CSV.read(MERGED, headers: true, encoding: "iso-8859-1:UTF-8")
+
+# Dynamically create a Person class based on the configuration
+Person = PersonStruct(*(PERSON_DEFINITION.keys))
+
 rows.each do |row|
 
   people_count = people_count + 1
-
-  registrant = Person.new(
-    row["First_Name"], 
-    row["Last_Name"],
-    row["alternate_id"],
-    row["maiden_name"],
-    row["pref_first_name"],
-    row["email_address"],
-    row["Reunion 2015 - RW15 Class Year"],
-    row["Guest of"]
-  )
+  person_values = PERSON_DEFINITION.each_pair.collect { |key,definition| [key, row[definition[:column_name]]] }.to_h
+  registrant = Person.new(person_values)
 
   # We need to add each of the activities the person is registered for and all of the appropriate data
   ACTIVITIES.each do |activity|
@@ -61,7 +120,8 @@ end
 # For each activity we can now generate a report that is actually useful!
 ACTIVITIES.each do |activity|
   filename = "#{DIRECTORY}#{activity[:name]}.csv"
-  headers = ["Alternate ID", "First Name", "Last Name", "Preferred First Name", "Former Name", "Email", "Class Year", "Guest Of"]
+  headers = []
+  PERSON_DEFINITION.each_value { |value| headers << value[:output_column_name] }
   activity[:columns].each do |column|
     headers.push(column)
   end
@@ -71,16 +131,11 @@ ACTIVITIES.each do |activity|
     
     registrants.each do |registrant|
       if registrant_activity = registrant.attending?(activity[:name])
-        row = [
-          registrant.alternate_id,
-          registrant.first_name,
-          registrant.last_name,
-          registrant.preferred_name,
-          registrant.former_name,
-          registrant.email,
-          registrant.class_year,
-          registrant.guest_of          
-        ]
+        row = []
+        PERSON_DEFINITION.each_key do |key|
+          row << registrant.instance_variable_get("@#{key}")
+        end
+        
         registrant_activity.first[:columns].each { |column| row.push(column) }
         csv << row
       end

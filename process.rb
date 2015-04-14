@@ -58,6 +58,7 @@ logger.debug { "loading event configuration from file #{configuration_file}" }
 load configuration_file
 
 # Merge rows when a guest has multiple. All text columns default to the first/newest row, quantity columns are summed
+# TODO: May need to have another look at this - the TRUE/FALSE columns should be working but let's be sure
 def merge_stack(stack)
   csv_table = CSV::Table.new(stack)
   
