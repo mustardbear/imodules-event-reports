@@ -1,9 +1,4 @@
-# Exclude everything in the config directory except sample.rb
-!/config
-/config/*
-!/config/sample.rb
-
-# Exclude everything in the data directory except sample_registrations.csv
+# Exclude everything in the data directory except the sample directory
 !/data
 /data/*
 !/data/sample
