@@ -1,20 +1,37 @@
 require 'csv'
 require 'colorize'
+require 'optparse'
+require 'ostruct'
+require 'logger'
+require './config'
 require './person_factory'
+require './arguments'
+require './merge'
 
-CONFIG_DIRECTORY = "./config/"
+# Create a logger for sending messages to the console
+logger = configure_logging(Logger.new(STDOUT))
 
-# Load the configuration file
-load "#{CONFIG_DIRECTORY}reunion15.rb"
-  
-# An array to hold all of the registrants
+# Parse out the arguments to see what event we're working on (from the list in config.rb)
+options = Arguments.parse(ARGV)
+
+configuration_file = "#{CONFIG_DIRECTORY}#{EVENTS[options.event.to_sym]}"
+
+# Load the config file
+logger.info("Creating reports using configuration file #{configuration_file}")
+load configuration_file
+
+logger.info("Creating merged report")
+Merge.create_merged_report(logger)
+
+# An array to hold all of the registrants and a counter for the number of people
 registrants = Array.new
 people_count = 0
 
-# Read in the entire registration report and go through each row creating people as we go
+# Read in the merged registration report and go through each row creating people as we go
 rows = CSV.read(MERGED, headers: true, encoding: "iso-8859-1:UTF-8")
 
 # Dynamically create a Person class based on the configuration
+logger.debug("Creating people objects for each row in the merged report")
 Person = PersonFactory::PersonStruct(*(PERSON_DEFINITION.keys))
 
 rows.each do |row|
@@ -36,6 +53,8 @@ rows.each do |row|
   # Add the person to the list of registrants
   registrants.push(registrant)
 end
+
+logger.debug("Created #{people_count} people records")
   
 # Now that we have an array of all the registrants we can make sure we have the right data for guests and class year
 registrants.each do |registrant|
@@ -53,24 +72,37 @@ registrants.each do |registrant|
 end
 
 # For each activity we can now generate a report that is actually useful!
+logger.info("Creating Activity Reports")
+
 ACTIVITIES.each do |activity|
+  logger.debug("Creating #{activity[:name]} report")
   filename = "#{DIRECTORY}#{activity[:name]}.csv"
   headers = []
+  
+  # Create header columns for the report based on the people definition and the activity
   PERSON_DEFINITION.each_value { |value| headers << value[:output_column_name] }
   activity[:columns].each do |column|
     headers.push(column)
   end
   
   CSV.open(filename, 'w') do |csv|
+    
+    # Add the headers to the report
     csv << headers
     
+    # Check each registrant - if the are registered for this activity put them in the report
     registrants.each do |registrant|
+      
+      # The Person.attending? method actually returns the activity so this is
+      # an assignment and a boolean expression - fun!
       if registrant_activity = registrant.attending?(activity[:name])
         row = []
+        # Add values for each column defined in person to the new row
         PERSON_DEFINITION.each_key do |key|
           row << registrant.instance_variable_get("@#{key}")
         end
         
+        # now add columns for each one defined in the activity
         registrant_activity.first[:columns].each { |column| row.push(column) }
         csv << row
       end
@@ -89,7 +121,9 @@ end
 unique_class_years.sort! { |x,y| y <=> x }.reverse!
 
 
-# Now let's try this Dashboard Thing
+# Create the dashboard report
+logger.info("Creating Dashboard")
+
 filename = "#{DIRECTORY}dashboard.csv"
 headers = ["Activity Name", "Total Number Registered", "Number of Primary Registrants", "Number of Guest Registrants"].concat(unique_class_years)
 CSV.open(filename, 'w') do |csv|
@@ -121,13 +155,3 @@ CSV.open(filename, 'w') do |csv|
   end
 end
 
-
-
-
-
-
-
-
-
-  
-  
