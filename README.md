@@ -15,4 +15,17 @@ Look in the data/sample directory for an example of these reports:
 - 2000 Friday Night Class Event.csv, Campus Tour.csv, Reunion 2015.csv, Welcome Cocktail Reception.csv - individual activity reports
 - dashboard.csv - the summarized dashboard report
 
-Assumptions: You must include the imodules_id column in your report - it is used to identify multiple rows for a single individual.
+## Requirements
+
+- Ability to run Ruby 2.x scripts
+- Bundler
+- A custom export from an Activity Driven Event that allows guests. The report must includes columns for:
+-- last name
+-- first name
+-- class year
+-- imodules id
+-- guest of (automatically included)
+
+## Usage
+
+Clone/download this repository, cd to the directory, and run bundle install. Once done you can check to see if it's working by running `ruby create_reports.rb -e sample` - this will run the report generator on the sample registration file. If you don't receive any errors you are ready to move on to configuring your own event.
