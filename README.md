@@ -32,7 +32,7 @@ Clone/download this repository, cd to the directory, and run bundle install. Onc
 
 ### Configuration
 
-1. First create a new directory in the data directory that will hold your reports. No spaces, please. For example, if this event is your 2016 homecoming event you can create a directory in data with the name homecoming15. When you run your custom export you will place the resulting .csv file in this directory.
+1. First create a new directory in the data directory that will hold your reports. No spaces, please. For example, if this event is your 2016 homecoming event you can create a directory in data with the name homecoming15. When you run your custom export you will place the resulting .csv file in this directory. **NOTE** the class year column values cannot be just empty - if you have blank or empty class years in your export, use Excel to replace the blanks/empty cells with a string of your choice, like "NONE".
 
 2. Copy the config/sample.rb file and rename the copy to correspond to your event, e.g. homecoming15.rb.
 
@@ -40,7 +40,7 @@ Clone/download this repository, cd to the directory, and run bundle install. Onc
 
    - **General configuration** (at the top): this defines where your reports will live and the name of the custom export and the merged report that the script will generate.
    - **Summables**: This is a list of the columns in your export that should be added together when merging rows. Usually these are the columns for fees and that have a 1, 0, -1, or blank in the for an activity.
-   - **Person Definition**: This is the columns from the export that you want in each of the activity report for each person. At a minimum you must have definitions for last name, first name, class year, and guest of. **NOTE** the class year column cannot be blank - if you have blank class years use Excel to replace the blanks/empty cells with a string of your choice, like "NONE". You can add others if you like, such as email or an offline system id. Each column has three parts that you need to define:
+   - **Person Definition**: This is the columns from the export that you want in each of the activity report for each person. At a minimum you must have definitions for last name, first name, class year, and guest of. You can add others if you like, such as email or an offline system id. Each column has three parts that you need to define:
       - **system name**: The name the system will use for the column - this needs to be an acceptable symbols in Ruby so no spaces or odd characters and must end in : **do not change this for last name, first name, class year, and guest of** - the are used by the system.
       - **column_name**: The actual column header from the export (copy and paste, must be in quotes)
       - **output_column_name**: the column header as you would like it to appear in activity reports (can be the same as column name)
