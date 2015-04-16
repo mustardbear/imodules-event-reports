@@ -20,11 +20,11 @@ Look in the data/sample directory for an example of these reports:
 - Ability to run Ruby 2.x scripts
 - Bundler
 - A custom export from an Activity Driven Event that allows guests. The report must includes columns for:
--- last name
--- first name
--- class year
--- imodules id
--- guest of (automatically included)
+..- last name
+..- first name
+..- class year
+..- imodules id
+..- guest of (automatically included)
 
 ## Usage
 
