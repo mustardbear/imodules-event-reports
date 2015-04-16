@@ -52,4 +52,4 @@ Clone/download this repository, cd to the directory, and run bundle install. Onc
    - short name: this is how you will tell the create reports script which event you want it to run on. For homecoming something like `h15:` would be fine.
    - The name of the configuration file you created in step 3 (must be in quotes).
    
-You should now be able to run the reports by going to the main directory and typing ruby create_reports.rb -e h15, where h15 is the short name created above.
+You should now be able to run the reports by going to the main directory and typing ruby create_reports.rb -e h15, where h15 is the short name created above.  
