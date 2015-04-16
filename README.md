@@ -13,7 +13,7 @@ Look in the data/sample directory for an example of these reports:
 - [sample_registrations.csv](https://github.com/mustardbear/imodules-event-reports/blob/master/data/sample/sample_registrations.csv) - the full event export as generated in iModules
 - [merged_sample_registrations.csv](https://github.com/mustardbear/imodules-event-reports/blob/master/data/sample/merged_sample_registrations.csv) - merged version of the full export
 - [2000 Friday Night Class Event.csv](https://github.com/mustardbear/imodules-event-reports/blob/master/data/sample/2000%20Friday%20Night%20Class%20Event.csv), [Campus Tour.csv](https://github.com/mustardbear/imodules-event-reports/blob/master/data/sample/Campus%20Tour.csv), [Reunion 2015.csv](https://github.com/mustardbear/imodules-event-reports/blob/master/data/sample/Reunion%202015.csv), [Welcome Cocktail Reception.csv](https://github.com/mustardbear/imodules-event-reports/blob/master/data/sample/Welcome%20Cocktail%20Reception.csv) - individual activity reports
-- dashboard.csv(https://github.com/mustardbear/imodules-event-reports/blob/master/data/sample/dashboard.csv) - the summarized dashboard report
+- [dashboard.csv](https://github.com/mustardbear/imodules-event-reports/blob/master/data/sample/dashboard.csv) - the summarized dashboard report
 
 ## Requirements
 
