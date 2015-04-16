@@ -5,7 +5,10 @@ LOG_LEVEL = Logger::INFO
 CONFIG_DIRECTORY = "./config/"
 
 # The names of the configuration files for each event that can be processed
-EVENTS = {r15: "reunion15.rb", sample: "sample.rb"}
+EVENTS = {
+  r15: "reunion15.rb", 
+  sample: "sample.rb"
+}
 
 
 # Method called to set up the logging format
