@@ -75,7 +75,7 @@ end
 logger.info("Creating Activity Reports")
 
 ACTIVITIES.each do |activity|
-  logger.debug("Creating #{activity[:name]} report")
+  logger.info("\tCreating #{activity[:name]} report")
   filename = "#{DIRECTORY}#{activity[:name]}.csv"
   headers = []
   

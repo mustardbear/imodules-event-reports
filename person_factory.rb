@@ -17,6 +17,7 @@ module PersonFactory
       # are needed for all people
       attr_reader *keys
       attr_reader :guests, :activities, :search_name
+      attr_writer :class_year
     
       # define the intialize method - most of the time we are just setting attributes
       # to the value from the csv file but it is possible to pass a custom proc

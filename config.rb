@@ -1,5 +1,5 @@
 # Determines which messages are sent to standard out
-LOG_LEVEL = Logger::DEBUG
+LOG_LEVEL = Logger::INFO
 
 # The directory where configuration files are located
 CONFIG_DIRECTORY = "./config/"

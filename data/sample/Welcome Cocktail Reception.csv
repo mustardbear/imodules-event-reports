@@ -1,0 +1,10 @@
+Alternate ID,First Name,Last Name,Preferred First Name,Email,Class Year,Guest Of,Welcome Cocktail Reception - Is attending,Welcome Cocktail Reception - RW15 - Friday Cocktail Reception,Fee Name (Welcome Cocktail Reception - RW15 - Friday Cocktail Reception),Welcome Cocktail Reception - RW15 - Friday Cocktail Reception - total_price_paid,Welcome Cocktail Reception - 9876 - Is Registered
+,Abigail,Adams,Abbey,,1970,"Adams, John",TRUE,1,Adult,25,TRUE
+2,John,Adams,John,adams@nosuchemail.com,1970,,TRUE,1,Adult,25,TRUE
+3,George,Washington,George,washington@nosuchemail.com,1980,,TRUE,1,Adult,25,TRUE
+,Martha,Washington,Marti,,1980,"Washington, George",TRUE,1,Child,0,TRUE
+6,Andrew,Jackson,Andrew,andrewjackson@nosuchemail.com,2014,,TRUE,1,Adult,25,TRUE
+7,James,Monroe,Jim,jamesmonroe@nosuchemail.com,NONE,,TRUE,1,Adult,25,TRUE
+8,Martin,Van Buren,Martin,martinvanburen@nosuchemail.com,1990,,TRUE,1,Adult,25,TRUE
+9,Hannah,Van Buren,Hannah,hannahvanburen@nosuchemail.com,1990,,TRUE,1,Adult,25,TRUE
+,Letitia,Tyler,Letitia,letitiatyler@nosuchemail.com,1995,"Tyler, John",TRUE,1.0,Adult,25.0,TRUE
