@@ -30,6 +30,11 @@ people_count = 0
 # Read in the merged registration report and go through each row creating people as we go
 rows = CSV.read(MERGED, headers: true, encoding: "iso-8859-1:UTF-8")
 
+# Put the column names to stdout in debug mode so you can copy and paste columns that have special characters
+debug_rows = ""
+rows.headers.each { |header| debug_rows = debug_rows + "#{header}\n" }
+logger.debug {"The headers:\n#{debug_rows}"}
+
 # Dynamically create a Person class based on the configuration
 logger.debug("Creating people objects for each row in the merged report")
 Person = PersonFactory::PersonStruct(*(PERSON_DEFINITION.keys))
@@ -41,7 +46,7 @@ rows.each do |row|
   registrant = Person.new(person_values)
 
   # We need to add each of the activities the person is registered for and all of the appropriate data
-  ACTIVITIES.each do |activity|
+  ACTIVITIES.each do |activity|    
     key_column = activity[:columns].last
     if row[key_column] && row[key_column].strip.downcase.eql?("true")
       columns = Array.new
@@ -65,8 +70,12 @@ registrants.each do |registrant|
       row.search_name.eql?(registrant.guest_of)
     end
     primary = primary_list.first
-    primary.add_guest(registrant)
-    registrant.class_year = primary.class_year
+    if primary
+      primary.add_guest(registrant)
+      registrant.class_year = primary.class_year
+    else
+      logger.warn("Registrant is a guest of someone not registered.\n\t#{registrant}")
+    end
   end
   
 end
