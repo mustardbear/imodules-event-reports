@@ -71,6 +71,8 @@ PERSON_DEFINITION = {
   maiden_name: { column_name: "maiden_name", output_column_name: "Former Name"  },
   email_address: { column_name: "email_address", output_column_name: "Email" },
   class_year: { column_name: "Reunion 2015 - RW15 Class Year" , setter: Proc.new { |value| value.eql?("Not an Alumnus/Alumna") ? "No Class Year" : (value.nil? || value.strip.empty? ? "No Class Year" : value) }, output_column_name: "Class Year" },
+  darden_society_member: { column_name: "Darden_Society_Member", output_column_name: "Darden Society Member" },
+  child_age: { column_name: "Reunion 2015 - RW15 Child Age", output_column_name: "Child Age"},
   guest_of: { column_name: "Guest of", output_column_name: "Guest Of" }
 }
 
