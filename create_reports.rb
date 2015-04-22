@@ -90,6 +90,7 @@ ACTIVITIES.each do |activity|
   
   # Create header columns for the report based on the people definition and the activity
   PERSON_DEFINITION.each_value { |value| headers << value[:output_column_name] }
+  headers.push("Number of Guests")
   activity[:columns].each do |column|
     headers.push(column)
   end
@@ -101,7 +102,6 @@ ACTIVITIES.each do |activity|
     
     # Check each registrant - if the are registered for this activity put them in the report
     registrants.each do |registrant|
-      
       # The Person.attending? method actually returns the activity so this is
       # an assignment and a boolean expression - fun!
       if registrant_activity = registrant.attending?(activity[:name])
@@ -110,6 +110,9 @@ ACTIVITIES.each do |activity|
         PERSON_DEFINITION.each_key do |key|
           row << registrant.instance_variable_get("@#{key}")
         end
+        
+        # Add a value for the total number of guests this person has
+        row << registrant.guests.length
         
         # now add columns for each one defined in the activity
         registrant_activity.first[:columns].each { |column| row.push(column) }
