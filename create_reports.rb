@@ -129,6 +129,30 @@ registrants.each do |row|
 end
 unique_class_years.sort! { |x,y| y <=> x }.reverse!
 
+# Create the No Activities Report
+logger.info("Creating No Activities Report")
+
+filename = "#{DIRECTORY}no-activities.csv"
+
+# Create header columns for the report based on the people definition
+headers = []
+PERSON_DEFINITION.each_value { |value| headers << value[:output_column_name] }
+
+CSV.open(filename, 'w') do |csv|
+  csv << headers
+
+  registrants.each do |registrant|
+    if registrant.activities.length == 0 && !registrant.is_guest?
+      # Add values for each column defined in person to the new row
+      row = []
+      PERSON_DEFINITION.each_key do |key|
+        row << registrant.instance_variable_get("@#{key}")
+      end
+      csv << row
+    end
+  end
+
+end
 
 # Create the dashboard report
 logger.info("Creating Dashboard")
