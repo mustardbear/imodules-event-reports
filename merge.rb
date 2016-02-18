@@ -4,6 +4,9 @@ module Merge
   # from the exported csv file (newest at the top of the stack) and returns a single row with
   # all summable columns added together.
   # NOTE: This assumes the top row in the stack is the most recent row.
+  #
+  # IMPORTANT: The original export must contain the imodules_id column (not included by default)
+  #
   def Merge.merge_stack(stack)
   
     # Initialize a new csv table from the stack and create an empty array to receive the merged row

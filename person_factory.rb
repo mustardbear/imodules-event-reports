@@ -42,6 +42,9 @@ module PersonFactory
         # out
         @search_name = "#{@last_name}, #{@first_name}"
         
+        # New reporting puts guest of in row for the registrant, making it look like they are
+        # a guest of themselves - this fixes that
+        @guest_of = nil if guest_of.eql?(@search_name)
       end
     
       # Most instance variables are only set through the initialization process but for those
@@ -69,6 +72,7 @@ module PersonFactory
   
       # It's important to know if this person is attending a given activity
       def attending?(activity_name)
+        test_activity = "Darden Worldwide Breakfast"
         activity = @activities.select { |row| row[:name].eql?(activity_name) }
         activity.length > 0 ? activity : false
       end

@@ -7,6 +7,7 @@ CONFIG_DIRECTORY = "./config/"
 # The names of the configuration files for each event that can be processed
 EVENTS = {
   r15: "reunion15.rb", 
+  r16: "reunion16.rb",
   sample: "sample.rb",
   uva15: "uva15.rb"
 }
