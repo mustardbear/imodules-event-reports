@@ -51,7 +51,7 @@ rows.each do |row|
     if row[key_column] && row[key_column].strip.downcase.eql?("true")
       columns = Array.new
       activity[:columns].each { |column| columns.push(row[column]) }
-      registrant.add_activity(activity[:name], columns)
+      registrant.add_activity(activity[:name], columns, activity[:free])
     end
   end
   
@@ -156,6 +156,44 @@ CSV.open(filename, 'w') do |csv|
   end
 
 end
+
+def is_freeloader(registrant)
+  
+  is_freeloader = true
+  registrant.activities.each do |activity|
+    if !activity[:free]
+      is_freeloader = false
+      break
+    end
+  end
+  return is_freeloader
+end
+
+# Create the Freeloader Report
+logger.info("Creating the Freeloader Report")
+filename = "#{DIRECTORY}freeloader.csv"
+
+# Create header columns for the report based on the people definition
+headers = []
+PERSON_DEFINITION.each_value { |value| headers << value[:output_column_name] }
+
+CSV.open(filename, 'w') do |csv|
+  csv << headers
+
+  registrants.each do |registrant|
+    if is_freeloader(registrant)
+      # Add values for each column defined in person to the new row
+      row = []
+      PERSON_DEFINITION.each_key do |key|
+        row << registrant.instance_variable_get("@#{key}")
+      end
+      csv << row      
+    end
+  end
+
+end
+
+
 
 # Create the dashboard report
 logger.info("Creating Dashboard")

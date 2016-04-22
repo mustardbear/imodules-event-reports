@@ -66,8 +66,8 @@ module PersonFactory
       end
 
       # Adding an activity is pretty straightforward
-      def add_activity(activity, columns)
-        @activities.push({name: activity, columns: columns})
+      def add_activity(activity, columns, free)
+        @activities.push({name: activity, columns: columns, is_free: free})
       end
   
       # It's important to know if this person is attending a given activity

@@ -12,7 +12,7 @@ require './merge'
 logger = configure_logging(Logger.new(STDOUT))
 
 
-configuration_file = "#{CONFIG_DIRECTORY}reunion15.rb"
+configuration_file = "#{CONFIG_DIRECTORY}reunion16.rb"
 
 # Load the config file
 logger.info("Creating reports using configuration file #{configuration_file}")
@@ -41,7 +41,7 @@ rows.each do |row|
     if row[key_column] && (row[key_column].strip.downcase.eql?("true") || row[key_column].to_i > 0)
       columns = Array.new
       activity[:columns].each { |column| columns.push(row[column]) }
-      registrant.add_activity(activity[:name], columns)
+      registrant.add_activity(activity[:name], columns, activity[:free])
     end
   end
   
