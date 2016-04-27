@@ -68,7 +68,9 @@ PERSON_DEFINITION = {
   email_address: { column_name: "email_address", output_column_name: "Email" },
   class_year: { column_name: "Reunion 2016 - RW16 Class Year",  setter: Proc.new { |value| value.eql?("Not an Alumnus/Alumna") ? "No Class Year" : (value.nil? || value.strip.empty? ? "No Class Year" : value) }, output_column_name: "Class Year" },
   child_age: { column_name: "Reunion 2016 - RW16 Child Age", output_column_name: "Child Age"},
-  guest_of: { column_name: "Registered By", output_column_name: "Guest Of" }
+  guest_of: { column_name: "Registered By", output_column_name: "Guest Of" },
+  hickory_club: { column_name: "Hickory_Club_Member", output_column_name: "Hickory Club Member"},
+  darden_society: { column_name: "Darden_Society_Member", output_column_name: "Darden Society Member"}
 }
 
 
@@ -82,7 +84,9 @@ ACTIVITIES = [
   { name: "Complimentary Child Care",
     columns: ["Complimentary Child Care - Is attending", 
               "Complimentary Child Care - RW16 - Childcare Days", 
-              "Complimentary Child Care - RW16 - Child Birthdate", 
+              "Complimentary Child Care - RW16 - Child Birthdate",
+              "Complimentary Child Care - RW16 - Childcare Form Sent",
+              "Complimentary Child Care - RW16 - Childcare Form Received",
               "Complimentary Child Care - 15064 - Is Registered"],
     free: true
   },

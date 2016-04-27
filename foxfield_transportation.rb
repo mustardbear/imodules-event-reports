@@ -76,7 +76,7 @@ def transportation_type(person)
   if person.attending?("Foxfield Spring Races")
     foxfield_activity = person.activities.select { |row| row[:name].eql?("Foxfield Spring Races") }.first
     puts("foxfield_activity = #{foxfield_activity}")
-    paid = foxfield_activity[:columns][5]
+    paid = foxfield_activity[:columns][6]
     puts("paid = #{paid}")
     if paid.to_i == 15
       return :bus
