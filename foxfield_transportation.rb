@@ -12,7 +12,7 @@ require './merge'
 logger = configure_logging(Logger.new(STDOUT))
 
 
-configuration_file = "#{CONFIG_DIRECTORY}reunion16.rb"
+configuration_file = "#{CONFIG_DIRECTORY}reunion17.rb"
 
 # Load the config file
 logger.info("Creating reports using configuration file #{configuration_file}")
@@ -77,14 +77,25 @@ def transportation_type(person)
     foxfield_activity = person.activities.select { |row| row[:name].eql?("Foxfield Spring Races") }.first
     puts("foxfield_activity = #{foxfield_activity}")
     paid = foxfield_activity[:columns][6]
+    fee_type = foxfield_activity[:columns][5]
     puts("paid = #{paid}")
-    if paid.to_i == 15
-      return :bus
-    elsif paid.to_i == 35
+    puts("fee_type = #{fee_type}")
+    return :own if fee_type.nil?
+    if fee_type.start_with?("Parking Pass")
       return :parking
+    elsif fee_type.start_with?("Bus")
+      return :bus
     else
       return :own
     end
+    
+    # if paid.to_i == 35
+    #   return :bus
+    # elsif paid.to_i == 35
+    #   return :parking
+    # else
+    #   return :own
+    # end
   end
 end
 
