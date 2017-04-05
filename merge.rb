@@ -42,6 +42,8 @@ module Merge
     logger.debug { "creating merged version in #{MERGED}" }
     CSV.open(MERGED, 'w') do |csv|
   
+    logger.info("#{SOURCE} DOES NOT CONTAIN imodules_id") && exit if !rows.headers.include?('imodules_id')
+    
       # Write headers to the top of the new file
       csv << rows.headers
   
