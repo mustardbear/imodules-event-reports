@@ -165,7 +165,7 @@ ACTIVITIES = [
               "1962 Friday Night Class Event - RW17 - Friday 1962 Event Fee - total_price_paid",
               "1962 Friday Night Class Event - RW17 - Friday 1962 Event Transportation",
               "1962 Friday Night Class Event - 21122 - Is Registered"],
-    free: true
+    free: false
   },
   
   { name: "1958  66 Abbott Society Friday Night Class Event",
