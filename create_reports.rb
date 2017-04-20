@@ -158,10 +158,9 @@ CSV.open(filename, 'w') do |csv|
 end
 
 def is_freeloader(registrant)
-  
-  is_freeloader = true
+  is_freeloader = registrant.activities.count > 0 ? true : false
   registrant.activities.each do |activity|
-    if !activity[:free]
+    if !activity[:is_free]
       is_freeloader = false
       break
     end

@@ -83,7 +83,6 @@ PERSON_DEFINITION = {
   darden_society: { column_name: "Darden_Society_Member", output_column_name: "Darden Society Member"}
 }
 
-
 ACTIVITIES = [
 
   { name: "Reunion 2017",
