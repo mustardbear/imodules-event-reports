@@ -81,9 +81,10 @@ def transportation_type(person)
     puts("paid = #{paid}")
     puts("fee_type = #{fee_type}")
     return :own if fee_type.nil?
-    if fee_type.start_with?("Parking Pass")
+    
+    if fee_type.start_with?("Parking Pass") || paid.to_i == 35
       return :parking
-    elsif fee_type.start_with?("Bus")
+    elsif fee_type.start_with?("Bus") || paid.to_i == 15
       return :bus
     else
       return :own
