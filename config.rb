@@ -9,6 +9,7 @@ EVENTS = {
   r15: "reunion15.rb", 
   r16: "reunion16.rb",
   r17: "reunion17.rb",
+  r18: "reunion18.rb",
   sample: "sample.rb",
   uva15: "uva15.rb"
 }

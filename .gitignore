@@ -2,3 +2,5 @@
 !/data
 /data/*
 !/data/sample
+
+data/sample/.DS_Store
