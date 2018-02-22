@@ -176,6 +176,12 @@ ACTIVITIES = [
               "Grant Green MBA 13 Memorial Bench Dedication - 27053 - Is Registered"],
     free: true
   },
+
+  { name: "Mark McLaughlin MBA 08 Memorial Bench Dedication",
+    columns: ["Mark McLaughlin MBA 08 Memorial Bench Dedication - Is attending",
+              "Mark McLaughlin MBA 08 Memorial Bench Dedication - 27762 - Is Registered"],
+    free: true
+  },  
   
   { name: "Welcome Cocktail Reception and Venture Fair",
     columns: ["Welcome Cocktail Reception and Venture Fair - Is attending",
