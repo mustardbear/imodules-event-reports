@@ -12,7 +12,7 @@ require './merge'
 logger = configure_logging(Logger.new(STDOUT))
 
 
-configuration_file = "#{CONFIG_DIRECTORY}reunion18.rb"
+configuration_file = "#{CONFIG_DIRECTORY}reunion19.rb"
 
 # Load the config file
 logger.info("Creating reports using configuration file #{configuration_file}")
