@@ -72,6 +72,10 @@ SUMMABLE = [
   "RW19 - Saturday Afternoon at the Vineyard Fee - total_price_paid",
   "RW19 - Saturday Afternoon at the Vineyard Transportation",
   "RW19 - Saturday Afternoon at the Vineyard Transportation - total_price_paid",
+  "RW19 - Abbott Society Luncheon and Vineyard Fee",
+  "RW19 - Abbott Society Luncheon and Vineyard Fee - total_price_paid",
+  "RW19 - Abbott Society Afternoon at the Vineyard Transportation",
+  "RW19 - Abbott Society Afternoon at the Vineyard Transportation - total_price_paid",
   "RW19 - Saturday Foxfield Fee",
   "RW19 - Saturday Foxfield Fee - total_price_paid",
   "RW19 - Foxfield Transportation",
@@ -431,8 +435,14 @@ ACTIVITIES = [
               "RW19 - Saturday Darden Barbecue and Field Day Fee - total_price_paid",
               "Option 1 Darden Picnic and Field Day - 29585 - Is Registered"],
     free: false
+  },
+  
+  { name: "Abbott Society Luncheon",
+    columns: ["Option 1 Abbott Society Luncheon - Is attending",
+              "Option 1 Abbott Society Luncheon - 30107 - Is Registered"],
+    free: true
   },    
-
+  
   { name: "Darden Picnic and Afternoon at the Vineyard",
     columns: ["Option 2 Darden Picnic and Afternoon at the Vineyard - Is attending",
               "RW19 - Saturday Afternoon at the Vineyard Fee",
@@ -442,6 +452,18 @@ ACTIVITIES = [
               "Fee Name (RW19 - Saturday Afternoon at the Vineyard Transportation)",
               "RW19 - Saturday Afternoon at the Vineyard Transportation - total_price_paid",
               "Option 2 Darden Picnic and Afternoon at the Vineyard - 29586 - Is Registered"],
+    free: false
+  },    
+
+  { name: "Abbott Society Luncheon and Afternoon at the Vineyard",
+    columns: ["Option 2 Abbott Society Luncheon and Afternoon at the Vineyard - Is attending",
+              "RW19 - Abbott Society Luncheon and Vineyard Fee",
+              "Fee Name (RW19 - Abbott Society Luncheon and Vineyard Fee)",
+              "RW19 - Abbott Society Luncheon and Vineyard Fee - total_price_paid",
+              "RW19 - Abbott Society Afternoon at the Vineyard Transportation",
+              "Fee Name (RW19 - Abbott Society Afternoon at the Vineyard Transportation)",
+              "RW19 - Abbott Society Afternoon at the Vineyard Transportation - total_price_paid",
+              "Option 2 Abbott Society Luncheon and Afternoon at the Vineyard - 30108 - Is Registered"],
     free: false
   },    
 
