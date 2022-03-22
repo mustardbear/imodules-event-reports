@@ -16,6 +16,7 @@ module Merge
     # Loop through each column and sum up the ones that are summable and put that in the merged row
     # otherwise just put the value of the top row in the merged one. 
     csv_table.headers.each do |header|
+      
       if SUMMABLE.include?(header)
         column = csv_table[header].collect { |x| x.nil? ? 0 : x.to_f} # Have to ensure nil is replaced with zero for adding
         fields << column.inject(0, :+)

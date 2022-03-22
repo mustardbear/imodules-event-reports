@@ -48,7 +48,7 @@ rows.each do |row|
   # We need to add each of the activities the person is registered for and all of the appropriate data
   ACTIVITIES.each do |activity|    
     key_column = activity[:columns].last
-    if row[key_column] && row[key_column].strip.downcase.eql?("true")
+    if row[key_column] && (row[key_column].strip.downcase.eql?("true") || row[key_column].strip.downcase.eql?("1"))
       columns = Array.new
       activity[:columns].each { |column| columns.push(row[column]) }
       registrant.add_activity(activity[:name], columns, activity[:free])
@@ -102,6 +102,7 @@ ACTIVITIES.each do |activity|
     
     # Check each registrant - if the are registered for this activity put them in the report
     registrants.each do |registrant|
+      
       # The Person.attending? method actually returns the activity so this is
       # an assignment and a boolean expression - fun!
       if registrant_activity = registrant.attending?(activity[:name])
@@ -192,6 +193,61 @@ CSV.open(filename, 'w') do |csv|
 
 end
 
+# Create the Conflict Reports
+logger.info("Creating the Conflict Reports")
+
+#Loop through each of the conflicting periods defined in the configuration, create a file for each
+CONFLICTS.each do |conflict_period|
+  filename = "#{DIRECTORY}conflicts-#{conflict_period[:conflict_name]}.csv"
+  
+  # Create header columns for the report based on the people definition
+  headers = []
+  PERSON_DEFINITION.each_value { |value| headers << value[:output_column_name] }
+  # Add a column for the list of activities that conflict for that person
+  headers.push("Conflicting Activities")
+  
+  CSV.open(filename, 'w') do |csv|
+    csv << headers
+    registrants.each do |registrant|
+      
+      # Create an array of the registrants activities names so we can compare it with the conflictable activities
+      registered_activities = []
+      registrant.activities.each do |activity|
+        registered_activities << activity[:name]
+      end      
+      conflicts = registered_activities & conflict_period[:activities]
+      if conflicts.length > 1
+        row = []
+        PERSON_DEFINITION.each_key do |key|
+          row << registrant.instance_variable_get("@#{key}")
+        end
+        row << conflicts
+        csv << row        
+      end
+    end
+  end
+end
+
+# Create Activity Registration Report
+logger.info("Creating the Activity Registration Report")
+
+# Create header columns, starting with the people definition, then appending activity names
+filename = "#{DIRECTORY}Activity Registration Report.csv"
+headers = []
+PERSON_DEFINITION.each_value { |value| headers << value[:output_column_name] }
+ACTIVITIES.each { |activity| headers << activity[:name]}
+
+CSV.open(filename, 'w') do |csv|
+  csv << headers
+  
+  # For each registrant add the person information and then true or false for each activity
+  registrants.each do |registrant|
+    row = []
+    PERSON_DEFINITION.each_key { |key| row << registrant.instance_variable_get("@#{key}") }
+    ACTIVITIES.each { |activity| row << (registrant.attending?(activity[:name]) ? "TRUE" : "FALSE") }
+    csv << row
+  end
+end
 
 
 # Create the dashboard report

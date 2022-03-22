@@ -72,7 +72,6 @@ module PersonFactory
   
       # It's important to know if this person is attending a given activity
       def attending?(activity_name)
-        test_activity = "Darden Worldwide Breakfast"
         activity = @activities.select { |row| row[:name].eql?(activity_name) }
         activity.length > 0 ? activity : false
       end

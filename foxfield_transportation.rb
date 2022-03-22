@@ -12,11 +12,12 @@ require './merge'
 logger = configure_logging(Logger.new(STDOUT))
 
 
-configuration_file = "#{CONFIG_DIRECTORY}reunion19.rb"
+configuration_file = "#{CONFIG_DIRECTORY}reunion22.rb"
 
 # Load the config file
 logger.info("Creating reports using configuration file #{configuration_file}")
 load configuration_file
+logger.debug("FOXFIELD_EVENT_NAME = #{FOXFIELD_EVENT_NAME}")
 
 # An array to hold all of the registrants and a counter for the number of people
 registrants = Array.new
@@ -26,7 +27,7 @@ people_count = 0
 rows = CSV.read(MERGED, headers: true, encoding: "iso-8859-1:UTF-8")
 
 # Dynamically create a Person class based on the configuration
-logger.debug("Creating people objects for each row in the merged report")
+logger.debug("Creating people objects for each row in the merged report (#{rows.count})")
 Person = PersonFactory::PersonStruct(*(PERSON_DEFINITION.keys))
 
 rows.each do |row|
@@ -37,7 +38,9 @@ rows.each do |row|
 
   # We need to add each of the activities the person is registered for and all of the appropriate data
   ACTIVITIES.each do |activity|    
+    #logger.debug("activity: #{activity}")
     key_column = activity[:columns].last
+    logger.debug("key_column: #{key_column}")
     if row[key_column] && (row[key_column].strip.downcase.eql?("true") || row[key_column].to_i > 0)
       columns = Array.new
       activity[:columns].each { |column| columns.push(row[column]) }
@@ -48,6 +51,7 @@ rows.each do |row|
   # Add the person to the list of registrants
   registrants.push(registrant)
 end
+logger.debug("We have #{registrants.count} registrants")
 
 # Now that we have an array of all the registrants we can make sure we have the right data for guests and class year
 registrants.each do |registrant|
@@ -69,12 +73,12 @@ registrants.each do |registrant|
 end
 
 def foxfield_registered(person)
-  person.attending?("Foxfield Spring Races")
+  person.attending?(FOXFIELD_EVENT_NAME)
 end
 
 def transportation_type(person)
-  if person.attending?("Foxfield Spring Races")
-    foxfield_activity = person.activities.select { |row| row[:name].eql?("Foxfield Spring Races") }.first
+  if person.attending?(FOXFIELD_EVENT_NAME)
+    foxfield_activity = person.activities.select { |row| row[:name].eql?(FOXFIELD_EVENT_NAME) }.first
     puts("foxfield_activity = #{foxfield_activity}")
     paid = foxfield_activity[:columns][6]
     fee_type = foxfield_activity[:columns][5]
@@ -115,8 +119,9 @@ CSV.open(filename, 'w') do |csv|
   
   # Check each registrant - if the are registered for this activity put them in the report
   registrants.each do |registrant|
-    
-    if registrant_activity = registrant.attending?("Foxfield Spring Races") && !registrant.is_guest?
+
+    if registrant_activity = registrant.attending?(FOXFIELD_EVENT_NAME) && !registrant.is_guest?
+
       row = []
       foxfield_tickets = 0
       bus_tickets = 0
