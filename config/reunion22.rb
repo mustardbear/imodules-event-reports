@@ -87,7 +87,9 @@ SUMMABLE = [
   "RW22 - Saturday 1987 Dinner Event Fee",
   "RW22 - Saturday 1987 Dinner Event Fee - total_price_paid",
   "RW22 - Saturday 1987 Event Transportation",
-  "RW22 - Saturday 1987 Event Transportation - total_price_paid"
+  "RW22 - Saturday 1987 Event Transportation - total_price_paid",
+  "RW22 - Saturday 2017 GEMBA Event Transportation",
+  "RW22 - Saturday 2017 GEMBA Event Transportation - total_price_paid"
 ]
 
 # You must have the following four definitions: first_name:, last_name:, class_year:, and guest_of:
@@ -572,6 +574,15 @@ ACTIVITIES = [
               "Class of 2017 EMBA Saturday Dinner - 31917 - Is Registered"],
     free: true
   },
+
+  { name: "Class of 2017 GEMBA Saturday Dinner",
+  columns: [#"Class of 2017 GEMBA Saturday Dinner - Is attending",
+            #"RW22 - Saturday 2017 GEMBA Event Transportation",
+            "Fee Name (RW22 - Saturday 2017 GEMBA Event Transportation)",
+            #"RW22 - Saturday 2017 GEMBA Event Transportation - total_price_paid",
+            "Class of 2017 GEMBA Saturday Dinner - 32013 - Is Registered"],
+  free: false
+},      
 
   { name: "Farewell Brunch at Darden",
     columns: [#"Farewell Brunch at Darden - Is attending",
